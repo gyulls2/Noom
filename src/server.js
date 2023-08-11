@@ -16,15 +16,17 @@ const server = http.createServer(app);
 
 const wss = new WebSocket.Server({ server }); // 같은 서버에서 http, webSocket 둘 다 작동 (같은 포트 사용)
 
+const sockets = [];
+
 wss.on("connection", (socket) => {
+  sockets.push(socket);
   console.log("Connected to Browser ✅");
   socket.on("close", () => {
     console.log("Disconnected to Browser ❌");
   });
   socket.on("message", (message) => {
-    console.log(message.toString("utf-8"));
+    sockets.forEach((aSocket) => aSocket.send(message.toString("utf-8")));
   });
-  socket.send("hello!!!");
 });
 
 server.listen(3000, handleListen);
