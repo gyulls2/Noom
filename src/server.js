@@ -17,11 +17,12 @@ const httpserver = http.createServer(app);
 const wsServer = SocketIO(httpserver);
 
 wsServer.on("connection", (socket) => {
+  socket.onAny((event) => {
+    console.log(`Socket Event: ${event}`);
+  });
   socket.on("enter_room", (roomName, done) => {
-    console.log(roomName);
-    setTimeout(() => {
-      done("hello from the backend"); // 백엔드 서버에서 실행 x -> 프엔에서 실행
-    }, 10000);
+    socket.join(roomName);
+    done();
   });
 });
 

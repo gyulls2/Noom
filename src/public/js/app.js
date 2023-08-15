@@ -2,15 +2,24 @@ const socket = io();
 
 const welcome = document.querySelector("#welcome");
 const form = welcome.querySelector("form");
+const room = document.querySelector("#room");
 
-function backendDone(msg) {
-  console.log(`The backend says: ${msg}`);
+room.hidden = true;
+
+let roomName;
+
+function showRoom() {
+  welcome.hidden = true;
+  room.hidden = false;
+  const h3 = room.querySelector("h3");
+  h3.innerText = `Room ${roomName}`;
 }
 
 function handleRoomSubmit(event) {
   event.preventDefault();
   const input = form.querySelector("input");
-  socket.emit("enter_room", { payload: input.value }, backendDone);
+  socket.emit("enter_room", { payload: input.value }, showRoom);
+  roomName = input.value;
 
   //socket.emit()
   // 첫번째 인자: event이름의 text, emit과 서버의 on은 같은 이름(string)이어야 한다.
