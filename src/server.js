@@ -17,7 +17,12 @@ const httpserver = http.createServer(app);
 const wsServer = SocketIO(httpserver);
 
 wsServer.on("connection", (socket) => {
-  console.log(socket);
+  socket.on("enter_room", (msg, done) => {
+    console.log(msg);
+    setTimeout(() => {
+      done();
+    }, 10000);
+  });
 });
 
 // const wss = new WebSocket.Server({ server }); // 같은 서버에서 http, webSocket 둘 다 작동 (같은 포트 사용)
