@@ -25,6 +25,13 @@ wsServer.on("connection", (socket) => {
     done();
     socket.to(roomName).emit("welcome");
   });
+  socket.on("disconnecting", () => {
+    socket.rooms.forEach((room) => socket.to(room).emit("bye"));
+  });
+  socket.on("new_message", (msg, room, done) => {
+    socket.to(room).emit("new_message", msg);
+    done();
+  });
 });
 
 // const wss = new WebSocket.Server({ server }); // 같은 서버에서 http, webSocket 둘 다 작동 (같은 포트 사용)
